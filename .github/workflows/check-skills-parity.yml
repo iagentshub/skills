@@ -1,0 +1,74 @@
+name: Check Skills Parity
+
+on:
+  push:
+    paths:
+      - 'public/**'
+  pull_request:
+    paths:
+      - 'public/**'
+
+jobs:
+  check-parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check skills parity across languages
+        run: |
+          cd public
+
+          langs=($(ls -d */ | sed 's/\///'))
+
+          if [ ${#langs[@]} -lt 2 ]; then
+            echo "Only one language found, nothing to compare."
+            exit 0
+          fi
+
+          ref="${langs[0]}"
+          ref_skills=$(ls "$ref" | sort)
+
+          failed=0
+
+          # Verificar paridad entre idiomas
+          for lang in "${langs[@]:1}"; do
+            lang_skills=$(ls "$lang" | sort)
+
+            missing=$(comm -23 <(echo "$ref_skills") <(echo "$lang_skills"))
+            extra=$(comm -13 <(echo "$ref_skills") <(echo "$lang_skills"))
+
+            if [ -n "$missing" ]; then
+              echo "❌ [$lang] Missing skills (present in '$ref' but not in '$lang'):"
+              echo "$missing" | sed 's/^/   - /'
+              failed=1
+            fi
+
+            if [ -n "$extra" ]; then
+              echo "⚠️  [$lang] Extra skills (present in '$lang' but not in '$ref'):"
+              echo "$extra" | sed 's/^/   - /'
+              failed=1
+            fi
+
+            if [ -z "$missing" ] && [ -z "$extra" ]; then
+              echo "✅ [$lang] matches [$ref]"
+            fi
+          done
+
+          # Verificar que cada skill tiene SKILL.md
+          echo ""
+          echo "Checking SKILL.md presence..."
+          for lang in "${langs[@]}"; do
+            for skill_dir in "$lang"/*/; do
+              skill=$(basename "$skill_dir")
+              if [ ! -f "$skill_dir/SKILL.md" ]; then
+                echo "❌ Missing SKILL.md: $lang/$skill"
+                failed=1
+              fi
+            done
+          done
+
+          if [ $failed -eq 0 ]; then
+            echo "✅ All skills have SKILL.md"
+          fi
+
+          exit $failed

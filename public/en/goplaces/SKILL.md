@@ -1,52 +1,80 @@
 ---
-name: goplaces
-description: Query Google Places API (New) via the goplaces CLI for text search, place details, resolve, and reviews. Use for human-friendly place lookup or JSON output for scripts.
-homepage: https://github.com/steipete/goplaces
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "📍",
-        "requires": { "bins": ["goplaces"], "env": ["GOOGLE_PLACES_API_KEY"] },
-        "primaryEnv": "GOOGLE_PLACES_API_KEY",
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "steipete/tap/goplaces",
-              "bins": ["goplaces"],
-              "label": "Install goplaces (brew)",
-            },
-          ],
-      },
-  }
+id: GOOGLE_PLACES
+name: Google Places API
+description: Query the Google Places API (New) via the goplaces CLI to search places, get details, resolve names, and read reviews. Requires GOOGLE_PLACES_API_KEY.
+icon: 📍
+category: data
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# goplaces
+# Skill: Google Places API (goplaces)
 
-Modern Google Places API (New) CLI. Human output by default, `--json` for scripts.
+Modern CLI for the Google Places API. Human-friendly output by default, `--json` for scripts.
 
-Install
+## Requirements
 
-- Homebrew: `brew install steipete/tap/goplaces`
+- `goplaces` installed
+- `GOOGLE_PLACES_API_KEY` environment variable set
 
-Config
+## Installation
 
-- `GOOGLE_PLACES_API_KEY` required.
-- Optional: `GOOGLE_PLACES_BASE_URL` for testing/proxying.
+```bash
+brew install steipete/tap/goplaces
+```
 
-Common commands
+## Configuration
 
-- Search: `goplaces search "coffee" --open-now --min-rating 4 --limit 5`
-- Bias: `goplaces search "pizza" --lat 40.8 --lng -73.9 --radius-m 3000`
-- Pagination: `goplaces search "pizza" --page-token "NEXT_PAGE_TOKEN"`
-- Resolve: `goplaces resolve "Soho, London" --limit 5`
-- Details: `goplaces details <place_id> --reviews`
-- JSON: `goplaces search "sushi" --json`
+```bash
+export GOOGLE_PLACES_API_KEY="your-api-key-here"
+# Optional: proxy/testing
+export GOOGLE_PLACES_BASE_URL="https://your-proxy/maps"
+```
 
-Notes
+## Commands
 
-- `--no-color` or `NO_COLOR` disables ANSI color.
-- Price levels: 0..4 (free → very expensive).
-- Type filter sends only the first `--type` value (API accepts one).
+### Search places
+
+```bash
+# Basic search
+goplaces search "coffee shop New York"
+
+# With filters
+goplaces search "Italian restaurant" --open-now --min-rating 4 --limit 5
+
+# With location and radius
+goplaces search "pizza" --lat 40.712 --lng -74.006 --radius-m 2000
+
+# By type
+goplaces search "hospital" --type hospital
+
+# Pagination
+goplaces search "bar" --page-token "NEXT_PAGE_TOKEN"
+```
+
+### Resolve name/address to place_id
+
+```bash
+goplaces resolve "Times Square, New York" --limit 5
+goplaces resolve "Eiffel Tower" --limit 3
+```
+
+### Place details
+
+```bash
+goplaces details <place_id>
+goplaces details <place_id> --reviews
+```
+
+### JSON output for scripts
+
+```bash
+goplaces search "sushi" --json
+goplaces details <place_id> --json
+```
+
+## Usage notes
+
+- `--no-color` or `NO_COLOR=1` disables ANSI color.
+- Price levels range from 0 (free) to 4 (very expensive).
+- The `--type` filter only accepts one type (Google API limitation).

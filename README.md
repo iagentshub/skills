@@ -10,9 +10,6 @@
 <p align="center">Public skills repository for <a href="https://github.com/iagentshub">iAgentsHub</a>. Skills are reusable instruction sets that extend agent capabilities across any supported language.</p>
 
 <p align="center">
-  <a href="https://github.com/iagentshub/skills/actions/workflows/check-skills-parity.yml">
-    <img src="https://github.com/iagentshub/skills/actions/workflows/check-skills-parity.yml/badge.svg" alt="Check Skills Parity">
-  </a>
   <img src="https://img.shields.io/badge/license-MIT-22c55e?style=flat-square" alt="License">
   <img src="https://img.shields.io/badge/skills-33-6366f1?style=flat-square" alt="Skills">
   <img src="https://img.shields.io/badge/languages-2-0891b2?style=flat-square" alt="Languages">
@@ -43,6 +40,21 @@
 | 🇪🇸 | Español | [docs/es.md](docs/es.md) | `public/es/` |
 
 See each language catalog for contributing guidelines and the full skills list.
+
+---
+
+## CI / Quality
+
+Every push and pull request runs automated checks to keep the repository consistent:
+
+| Workflow | Trigger | What it does |
+|---|---|---|
+| [![Parity](https://github.com/iagentshub/skills/actions/workflows/check-skills-parity.yml/badge.svg)](https://github.com/iagentshub/skills/actions/workflows/check-skills-parity.yml) | Changes in `public/` | Ensures every skill exists in all languages with an identical slug |
+| [![Frontmatter](https://github.com/iagentshub/skills/actions/workflows/validate-frontmatter.yml/badge.svg)](https://github.com/iagentshub/skills/actions/workflows/validate-frontmatter.yml) | Changes in `public/` | Verifies each `SKILL.md` has the required `name` and `description` fields |
+| [![Markdown](https://github.com/iagentshub/skills/actions/workflows/lint-markdown.yml/badge.svg)](https://github.com/iagentshub/skills/actions/workflows/lint-markdown.yml) | Changes to any `.md` file | Validates Markdown syntax across all documentation |
+| [![Stats](https://github.com/iagentshub/skills/actions/workflows/update-stats.yml/badge.svg)](https://github.com/iagentshub/skills/actions/workflows/update-stats.yml) | Merge to `main` | Auto-updates skill count in README and catalogs |
+
+PRs are also labeled automatically (`new-skill`, `translation`, `docs`, `ci`) based on the files changed.
 
 ---
 

@@ -1,58 +1,43 @@
 ---
-name: weather
-description: "Get current weather and forecasts via wttr.in or Open-Meteo. Use when: user asks about weather, temperature, or forecasts for any location. NOT for: historical weather data, severe weather alerts, or detailed meteorological analysis. No API key needed."
-homepage: https://wttr.in/:help
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "☔",
-        "requires": { "bins": ["curl"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "curl",
-              "bins": ["curl"],
-              "label": "Install curl (brew)",
-            },
-          ],
-      },
-  }
+id: WEATHER
+name: Weather & Forecast
+description: Get current weather and forecasts via wttr.in. Use when the user asks about weather, temperature, or forecasts for any location. No API key required.
+icon: ☔
+category: data
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# Weather Skill
+# Skill: Weather & Forecast
 
-Get current weather conditions and forecasts.
+Get current weather conditions and forecasts using `wttr.in` via `curl`. No API key needed.
 
-## When to Use
+## When to use
 
 ✅ **USE this skill when:**
 
-- "What's the weather?"
+- "What's the weather like?"
 - "Will it rain today/tomorrow?"
 - "Temperature in [city]"
-- "Weather forecast for the week"
-- Travel planning weather checks
+- "Week forecast"
+- Travel planning
 
-## When NOT to Use
+## When NOT to use
 
 ❌ **DON'T use this skill when:**
 
 - Historical weather data → use weather archives/APIs
 - Climate analysis or trends → use specialized data sources
-- Hyper-local microclimate data → use local sensors
-- Severe weather alerts → check official NWS sources
-- Aviation/marine weather → use specialized services (METAR, etc.)
+- Severe weather alerts → check official sources (NWS, etc.)
+- Aviation/nautical weather → use specialized services (METAR, etc.)
 
-## Location
+## Requirements
 
-Always include a city, region, or airport code in weather queries.
+- `curl` on PATH
 
 ## Commands
 
-### Current Weather
+### Current weather
 
 ```bash
 # One-line summary
@@ -71,17 +56,17 @@ curl "wttr.in/New+York?format=3"
 # 3-day forecast
 curl "wttr.in/London"
 
-# Week forecast
+# Extended format
 curl "wttr.in/London?format=v2"
 
 # Specific day (0=today, 1=tomorrow, 2=day after)
 curl "wttr.in/London?1"
 ```
 
-### Format Options
+### Format options
 
 ```bash
-# One-liner
+# One custom line
 curl "wttr.in/London?format=%l:+%c+%t+%w"
 
 # JSON output
@@ -91,22 +76,22 @@ curl "wttr.in/London?format=j1"
 curl "wttr.in/London.png"
 ```
 
-### Format Codes
+### Format codes
 
-- `%c` — Weather condition emoji
+- `%c` — Condition emoji
 - `%t` — Temperature
-- `%f` — "Feels like"
+- `%f` — Feels like
 - `%w` — Wind
 - `%h` — Humidity
 - `%p` — Precipitation
 - `%l` — Location
 
-## Quick Responses
+## Quick examples
 
-**"What's the weather?"**
+**"What's the weather like?"**
 
 ```bash
-curl -s "wttr.in/London?format=%l:+%c+%t+(feels+like+%f),+%w+wind,+%h+humidity"
+curl -s "wttr.in/London?format=%l:+%c+%t+(feels+%f),+wind+%w,+humidity+%h"
 ```
 
 **"Will it rain?"**
@@ -114,16 +99,3 @@ curl -s "wttr.in/London?format=%l:+%c+%t+(feels+like+%f),+%w+wind,+%h+humidity"
 ```bash
 curl -s "wttr.in/London?format=%l:+%c+%p"
 ```
-
-**"Weekend forecast"**
-
-```bash
-curl "wttr.in/London?format=v2"
-```
-
-## Notes
-
-- No API key needed (uses wttr.in)
-- Rate limited; don't spam requests
-- Works for most global cities
-- Supports airport codes: `curl wttr.in/ORD`

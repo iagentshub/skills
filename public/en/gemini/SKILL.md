@@ -1,43 +1,54 @@
 ---
-name: gemini
-description: Gemini CLI for one-shot Q&A, summaries, and generation.
-homepage: https://ai.google.dev/
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "✨",
-        "requires": { "bins": ["gemini"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "gemini-cli",
-              "bins": ["gemini"],
-              "label": "Install Gemini CLI (brew)",
-            },
-          ],
-      },
-  }
+id: GEMINI
+name: Gemini CLI
+description: Gemini CLI for queries, summaries, and content generation in one-shot mode. Use when you need to query Google's Gemini model directly from the terminal.
+icon: ✨
+category: ai
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# Gemini CLI
+# Skill: Gemini CLI
 
-Use Gemini in one-shot mode with a positional prompt (avoid interactive mode).
+Use the Gemini CLI in one-shot mode to answer questions, generate content, and summarize information. Avoid interactive mode.
 
-Quick start
+## Requirements
 
-- `gemini "Answer this question..."`
-- `gemini --model <name> "Prompt..."`
-- `gemini --output-format json "Return JSON"`
+- `gemini` CLI installed
+- Authentication configured (run `gemini` once interactively and follow the login flow)
 
-Extensions
+## Installation
 
-- List: `gemini --list-extensions`
-- Manage: `gemini extensions <command>`
+```bash
+brew install gemini-cli
+```
 
-Notes
+## Basic usage
 
-- If auth is required, run `gemini` once interactively and follow the login flow.
-- Avoid `--yolo` for safety.
+```bash
+# Simple query
+gemini "What is the capital of France?"
+
+# With specific model
+gemini --model gemini-2.5-pro "Explain the theory of relativity in 3 paragraphs"
+
+# JSON response
+gemini --output-format json "Return a JSON with the 5 most populated capitals in Europe"
+```
+
+## Extensions
+
+```bash
+# List available extensions
+gemini --list-extensions
+
+# Manage extensions
+gemini extensions --help
+```
+
+## Notes
+
+- First time, run `gemini` interactively to complete the Google login flow.
+- Always use one-shot mode (prompt as argument); avoid interactive mode in scripts and agents.
+- Avoid `--yolo` for security reasons.
+- Full reference: `gemini --help`.

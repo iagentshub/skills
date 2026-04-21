@@ -1,81 +1,93 @@
 ---
-name: obsidian
-description: Work with Obsidian vaults (plain Markdown notes) and automate via obsidian-cli.
-homepage: https://help.obsidian.md
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "💎",
-        "requires": { "bins": ["obsidian-cli"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "yakitrak/yakitrak/obsidian-cli",
-              "bins": ["obsidian-cli"],
-              "label": "Install obsidian-cli (brew)",
-            },
-          ],
-      },
-  }
+id: OBSIDIAN
+name: Obsidian
+description: "Work with Obsidian vaults (plain Markdown notes) and automate operations with obsidian-cli: search, create, move, rename, and delete notes. macOS/Linux with Obsidian installed."
+icon: 💎
+category: notes
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
 # Obsidian
 
-Obsidian vault = a normal folder on disk.
+An Obsidian vault is simply a folder on disk with Markdown files.
 
-Vault structure (typical)
+Homepage: https://help.obsidian.md
 
-- Notes: `*.md` (plain text Markdown; edit with any editor)
-- Config: `.obsidian/` (workspace + plugin settings; usually don’t touch from scripts)
+## Vault structure (typical)
+
+- Notes: `*.md` (plain Markdown; editable with any editor)
+- Config: `.obsidian/` (workspace settings and plugins; normally don't touch)
 - Canvases: `*.canvas` (JSON)
-- Attachments: whatever folder you chose in Obsidian settings (images/PDFs/etc.)
+- Attachments: the folder you configured in Obsidian (images, PDFs, etc.)
 
-## Find the active vault(s)
+## Installation
 
-Obsidian desktop tracks vaults here (source of truth):
+```bash
+brew install yakitrak/yakitrak/obsidian-cli
+```
 
-- `~/Library/Application Support/obsidian/obsidian.json`
+## Find the active vault
 
-`obsidian-cli` resolves vaults from that file; vault name is typically the **folder name** (path suffix).
+Obsidian stores vaults in:
+- macOS: `~/Library/Application Support/obsidian/obsidian.json`
 
-Fast “what vault is active / where are the notes?”
+`obsidian-cli` resolves vaults from that file; the vault name is normally the folder name.
 
-- If you’ve already set a default: `obsidian-cli print-default --path-only`
-- Otherwise, read `~/Library/Application Support/obsidian/obsidian.json` and use the vault entry with `"open": true`.
+```bash
+# If you already have a default vault configured:
+obsidian-cli print-default --path-only
 
-Notes
+# Otherwise, read the config file:
+cat ~/Library/Application\ Support/obsidian/obsidian.json
+```
 
-- Multiple vaults common (iCloud vs `~/Documents`, work/personal, etc.). Don’t guess; read config.
-- Avoid writing hardcoded vault paths into scripts; prefer reading the config or using `print-default`.
+> Don't hardcode vault paths; always read the config or use `print-default`.
 
-## obsidian-cli quick start
+## obsidian-cli: quick start
 
-Pick a default vault (once):
+### Set default vault (once)
 
-- `obsidian-cli set-default "<vault-folder-name>"`
-- `obsidian-cli print-default` / `obsidian-cli print-default --path-only`
+```bash
+obsidian-cli set-default "my-vault-name"
+obsidian-cli print-default
+```
 
-Search
+### Search notes
 
-- `obsidian-cli search "query"` (note names)
-- `obsidian-cli search-content "query"` (inside notes; shows snippets + lines)
+```bash
+# Search by name
+obsidian-cli search "query"
 
-Create
+# Search by content (shows snippets and line numbers)
+obsidian-cli search-content "query"
+```
 
-- `obsidian-cli create "Folder/New note" --content "..." --open`
-- Requires Obsidian URI handler (`obsidian://…`) working (Obsidian installed).
-- Avoid creating notes under “hidden” dot-folders (e.g. `.something/...`) via URI; Obsidian may refuse.
+### Create notes
 
-Move/rename (safe refactor)
+```bash
+obsidian-cli create "Folder/New note" --content "Initial content" --open
+```
 
-- `obsidian-cli move "old/path/note" "new/path/note"`
-- Updates `[[wikilinks]]` and common Markdown links across the vault (this is the main win vs `mv`).
+> Requires Obsidian's URI handler (`obsidian://...`) to work (Obsidian installed).
+> Avoid creating notes under hidden folders (e.g. `.something/...`); Obsidian may reject them.
 
-Delete
+### Move/rename (safe refactoring)
 
-- `obsidian-cli delete "path/note"`
+```bash
+obsidian-cli move "old/path/note" "new/path/note"
+```
 
-Prefer direct edits when appropriate: open the `.md` file and change it; Obsidian will pick it up.
+Updates `[[wikilinks]]` and Markdown links across the vault — this is the main advantage over `mv`.
+
+### Delete notes
+
+```bash
+obsidian-cli delete "path/note"
+```
+
+## Notes
+
+- Multiple vaults are common (iCloud vs `~/Documents`, work/personal, etc.). Don't guess; read the config.
+- For direct edits, open the `.md` file and change it; Obsidian will detect it automatically.
+- Avoid hardcoding vault paths in scripts; prefer reading the config or using `print-default`.

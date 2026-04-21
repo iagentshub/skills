@@ -1,118 +1,86 @@
 ---
-name: apple-reminders
-description: Manage Apple Reminders via remindctl CLI (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.
-homepage: https://github.com/steipete/remindctl
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "⏰",
-        "os": ["darwin"],
-        "requires": { "bins": ["remindctl"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "steipete/tap/remindctl",
-              "bins": ["remindctl"],
-              "label": "Install remindctl via Homebrew",
-            },
-          ],
-      },
-  }
+id: APPLE_REMINDERS
+name: Apple Reminders CLI
+description: Manage Apple Reminders from the terminal with remindctl. List, create, complete, and delete reminders with date and list support. Syncs with iOS/iPadOS.
+icon: ⏰
+category: productivity
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
 # Apple Reminders CLI (remindctl)
 
+> ⚠️ **macOS only.** Reminders sync via iCloud (iPhone/iPad).
+
 Use `remindctl` to manage Apple Reminders directly from the terminal.
 
-## When to Use
+## When to use
 
 ✅ **USE this skill when:**
 
 - User explicitly mentions "reminder" or "Reminders app"
-- Creating personal to-dos with due dates that sync to iOS
+- Creating personal tasks with due dates that sync to iOS
 - Managing Apple Reminders lists
-- User wants tasks to appear in their iPhone/iPad Reminders app
+- User wants tasks to appear in their iPhone/iPad
 
-## When NOT to Use
+## When NOT to use
 
 ❌ **DON'T use this skill when:**
 
-- Scheduling OpenClaw tasks or alerts → use `cron` tool with systemEvent instead
+- Scheduling agent alerts → use cron or the task scheduler
 - Calendar events or appointments → use Apple Calendar
-- Project/work task management → use Notion, GitHub Issues, or task queue
-- One-time notifications → use `cron` tool for timed alerts
-- User says "remind me" but means an OpenClaw alert → clarify first
+- Project/work task management → use Notion, GitHub Issues, or other tools
+- User says "remind me" but means an agent alert → clarify first
 
-## Setup
-
-- Install: `brew install steipete/tap/remindctl`
-- macOS-only; grant Reminders permission when prompted
-- Check status: `remindctl status`
-- Request access: `remindctl authorize`
-
-## Common Commands
-
-### View Reminders
+## Installation
 
 ```bash
-remindctl                    # Today's reminders
-remindctl today              # Today
-remindctl tomorrow           # Tomorrow
-remindctl week               # This week
-remindctl overdue            # Past due
-remindctl all                # Everything
-remindctl 2026-01-04         # Specific date
+brew install steipete/tap/remindctl
 ```
 
-### Manage Lists
+Grant access to Reminders when prompted.
+
+## View reminders
 
 ```bash
-remindctl list               # List all lists
-remindctl list Work          # Show specific list
-remindctl list Projects --create    # Create list
-remindctl list Work --delete        # Delete list
+remindctl               # Today's reminders
+remindctl today         # Today
+remindctl tomorrow      # Tomorrow
+remindctl week          # This week
+remindctl overdue       # Past due
+remindctl all           # All reminders
+remindctl 2026-05-01    # Specific date
 ```
 
-### Create Reminders
+## Manage lists
 
 ```bash
-remindctl add "Buy milk"
+remindctl list                           # View all lists
+remindctl list Work                      # View specific list
+remindctl list "Shopping" --create       # Create list
+remindctl list "Shopping" --delete       # Delete list
+```
+
+## Create reminders
+
+```bash
+remindctl add "Buy bread"
 remindctl add --title "Call mom" --list Personal --due tomorrow
-remindctl add --title "Meeting prep" --due "2026-02-15 09:00"
+remindctl add --title "Team meeting" --due "2026-05-10 09:00"
+remindctl add --title "Medical checkup" --list Health --due "2026-06-01"
 ```
 
-### Complete/Delete
+## Complete and delete
 
 ```bash
-remindctl complete 1 2 3     # Complete by ID
+remindctl complete 1 2 3       # Complete by ID
 remindctl delete 4A83 --force  # Delete by ID
 ```
 
-### Output Formats
+## Output formats
 
 ```bash
-remindctl today --json       # JSON for scripting
-remindctl today --plain      # TSV format
-remindctl today --quiet      # Counts only
+remindctl today --json         # JSON for scripting
+remindctl today --plain        # TSV format
+remindctl today --quiet        # Counts only
 ```
-
-## Date Formats
-
-Accepted by `--due` and date filters:
-
-- `today`, `tomorrow`, `yesterday`
-- `YYYY-MM-DD`
-- `YYYY-MM-DD HH:mm`
-- ISO 8601 (`2026-01-04T12:34:56Z`)
-
-## Example: Clarifying User Intent
-
-User: "Remind me to check on the deploy in 2 hours"
-
-**Ask:** "Do you want this in Apple Reminders (syncs to your phone) or as an OpenClaw alert (I'll message you here)?"
-
-- Apple Reminders → use this skill
-- OpenClaw alert → use `cron` tool with systemEvent

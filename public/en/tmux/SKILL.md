@@ -1,170 +1,100 @@
 ---
-name: tmux
-description: Remote-control tmux sessions for interactive CLIs by sending keystrokes and scraping pane output.
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "🧵",
-        "os": ["darwin", "linux"],
-        "requires": { "bins": ["tmux"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "tmux",
-              "bins": ["tmux"],
-              "label": "Install tmux (brew)",
-            },
-          ],
-      },
-  }
+id: TMUX
+name: tmux Session Control
+description: Control tmux sessions by sending keys and reading pane output. Useful for managing long-running interactive processes, interactive CLIs, and background tasks.
+icon: 🧵
+category: dev
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# tmux Session Control
+# Skill: tmux Session Control
 
-Control tmux sessions by sending keystrokes and reading output. Essential for managing Claude Code sessions.
+Control tmux sessions by sending keystrokes and reading output. Essential for managing interactive processes and background tasks.
 
-## When to Use
+## When to use
 
 ✅ **USE this skill when:**
 
-- Monitoring Claude/Codex sessions in tmux
+- Monitoring interactive processes in tmux
 - Sending input to interactive terminal applications
-- Scraping output from long-running processes in tmux
+- Reading output from long-running processes in tmux
 - Navigating tmux panes/windows programmatically
-- Checking on background work in existing sessions
+- Checking status of background jobs
 
-## When NOT to Use
+## When NOT to use
 
 ❌ **DON'T use this skill when:**
 
-- Running one-off shell commands → use `exec` tool directly
-- Starting new background processes → use `exec` with `background:true`
-- Non-interactive scripts → use `exec` tool
-- The process isn't in tmux
-- You need to create a new tmux session → use `exec` with `tmux new-session`
+- Running one-off shell commands → use the executor directly
+- Starting new background processes → use the executor with background mode
+- Non-interactive scripts → use the shell executor
+- The process is not inside tmux
 
-## Example Sessions
+## Installation
 
-| Session                 | Purpose                     |
-| ----------------------- | --------------------------- |
-| `shared`                | Primary interactive session |
-| `worker-2` - `worker-8` | Parallel worker sessions    |
+```bash
+brew install tmux
+```
 
-## Common Commands
+## Common commands
 
-### List Sessions
+### List sessions
 
 ```bash
 tmux list-sessions
 tmux ls
 ```
 
-### Capture Output
+### Capture output
 
 ```bash
-# Last 20 lines of pane
-tmux capture-pane -t shared -p | tail -20
+# Last 20 lines of the pane
+tmux capture-pane -t my-session -p | tail -20
 
-# Entire scrollback
-tmux capture-pane -t shared -p -S -
+# Full scrollback
+tmux capture-pane -t my-session -p -S -
 
-# Specific pane in window
-tmux capture-pane -t shared:0.0 -p
+# Specific pane in a window
+tmux capture-pane -t my-session:0.0 -p
 ```
 
-### Send Keys
+### Send keys
 
 ```bash
-# Send text (doesn't press Enter)
-tmux send-keys -t shared "hello"
+# Send text (without pressing Enter)
+tmux send-keys -t my-session "hello"
 
 # Send text + Enter
-tmux send-keys -t shared "y" Enter
+tmux send-keys -t my-session "ls -la" Enter
 
-# Send special keys
-tmux send-keys -t shared Enter
-tmux send-keys -t shared Escape
-tmux send-keys -t shared C-c          # Ctrl+C
-tmux send-keys -t shared C-d          # Ctrl+D (EOF)
-tmux send-keys -t shared C-z          # Ctrl+Z (suspend)
+# Special keys
+tmux send-keys -t my-session Enter
+tmux send-keys -t my-session Escape
+tmux send-keys -t my-session C-c          # Ctrl+C
+tmux send-keys -t my-session C-d          # Ctrl+D (EOF)
+tmux send-keys -t my-session C-z          # Ctrl+Z (suspend)
 ```
 
-### Window/Pane Navigation
+### Window and pane navigation
 
 ```bash
 # Select window
-tmux select-window -t shared:0
+tmux select-window -t my-session:0
 
 # Select pane
-tmux select-pane -t shared:0.1
+tmux select-pane -t my-session:0.1
 
 # List windows
-tmux list-windows -t shared
+tmux list-windows -t my-session
 ```
 
-### Session Management
+### Session management
 
 ```bash
-# Create new session
-tmux new-session -d -s newsession
+# Create new session in background
+tmux new-session -d -s new-session
 
 # Kill session
-tmux kill-session -t sessionname
-
-# Rename session
-tmux rename-session -t old new
+tmux kill-session -t my-session
 ```
-
-## Sending Input Safely
-
-For interactive TUIs (Claude Code, Codex, etc.), split text and Enter into separate sends to avoid paste/multiline edge cases:
-
-```bash
-tmux send-keys -t shared -l -- "Please apply the patch in src/foo.ts"
-sleep 0.1
-tmux send-keys -t shared Enter
-```
-
-## Claude Code Session Patterns
-
-### Check if Session Needs Input
-
-```bash
-# Look for prompts
-tmux capture-pane -t worker-3 -p | tail -10 | grep -E "❯|Yes.*No|proceed|permission"
-```
-
-### Approve Claude Code Prompt
-
-```bash
-# Send 'y' and Enter
-tmux send-keys -t worker-3 'y' Enter
-
-# Or select numbered option
-tmux send-keys -t worker-3 '2' Enter
-```
-
-### Check All Sessions Status
-
-```bash
-for s in shared worker-2 worker-3 worker-4 worker-5 worker-6 worker-7 worker-8; do
-  echo "=== $s ==="
-  tmux capture-pane -t $s -p 2>/dev/null | tail -5
-done
-```
-
-### Send Task to Session
-
-```bash
-tmux send-keys -t worker-4 "Fix the bug in auth.js" Enter
-```
-
-## Notes
-
-- Use `capture-pane -p` to print to stdout (essential for scripting)
-- `-S -` captures entire scrollback history
-- Target format: `session:window.pane` (e.g., `shared:0.0`)
-- Sessions persist across SSH disconnects

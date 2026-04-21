@@ -1,45 +1,60 @@
 ---
-name: camsnap
-description: Capture frames or clips from RTSP/ONVIF cameras.
-homepage: https://camsnap.ai
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "📸",
-        "requires": { "bins": ["camsnap"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "steipete/tap/camsnap",
-              "bins": ["camsnap"],
-              "label": "Install camsnap (brew)",
-            },
-          ],
-      },
-  }
+id: CAMSNAP
+name: RTSP/ONVIF Cameras (camsnap)
+description: Capture snapshots and clips from RTSP/ONVIF IP cameras with the camsnap CLI. Allows adding cameras, taking snapshots, recording clips, and detecting motion.
+icon: 📸
+category: media
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# camsnap
+# RTSP/ONVIF Cameras (camsnap)
 
-Use `camsnap` to grab snapshots, clips, or motion events from configured cameras.
+Use `camsnap` to capture snapshots, clips, or motion events from configured IP cameras.
 
-Setup
+## Requirements
 
-- Config file: `~/.config/camsnap/config.yaml`
-- Add camera: `camsnap add --name kitchen --host 192.168.0.10 --user user --pass pass`
+- `camsnap` installed
+- `ffmpeg` on PATH
+- IP cameras with RTSP or ONVIF support on the local network
 
-Common commands
+## Installation
 
-- Discover: `camsnap discover --info`
-- Snapshot: `camsnap snap kitchen --out shot.jpg`
-- Clip: `camsnap clip kitchen --dur 5s --out clip.mp4`
-- Motion watch: `camsnap watch kitchen --threshold 0.2 --action '...'`
-- Doctor: `camsnap doctor --probe`
+```bash
+brew install steipete/tap/camsnap
+```
 
-Notes
+## Configuration
+
+Config file: `~/.config/camsnap/config.yaml`
+
+### Add a camera
+
+```bash
+camsnap add --name kitchen --host 192.168.1.10 --user user --pass pass
+camsnap add --name entrance --host 192.168.1.11 --user admin --pass admin123
+```
+
+## Common commands
+
+```bash
+# Discover cameras on the local network
+camsnap discover --info
+
+# Snapshot
+camsnap snap kitchen --out /tmp/kitchen.jpg
+
+# Record clip
+camsnap clip kitchen --dur 5s --out /tmp/clip.mp4
+
+# Motion detection
+camsnap watch kitchen --threshold 0.2 --action 'echo "Motion detected"'
+
+# Connection diagnostics
+camsnap doctor --probe
+```
+
+## Notes
 
 - Requires `ffmpeg` on PATH.
-- Prefer a short test capture before longer clips.
+- Run a short test capture before longer recordings.

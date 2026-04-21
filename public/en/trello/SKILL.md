@@ -1,61 +1,51 @@
 ---
-name: trello
-description: Manage Trello boards, lists, and cards via the Trello REST API.
-homepage: https://developer.atlassian.com/cloud/trello/rest/
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "📋",
-        "requires": { "bins": ["jq"], "env": ["TRELLO_API_KEY", "TRELLO_TOKEN"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "jq",
-              "bins": ["jq"],
-              "label": "Install jq (brew)",
-            },
-          ],
-      },
-  }
+id: TRELLO
+name: Trello
+description: "Manage Trello boards, lists, and cards via the REST API. Requires TRELLO_API_KEY and TRELLO_TOKEN. Use to create, move, comment, and archive cards, and to list boards and lists."
+icon: 📋
+category: productivity
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# Trello Skill
+# Trello
 
-Manage Trello boards, lists, and cards directly from OpenClaw.
+Manage Trello boards, lists, and cards directly with the REST API.
+
+Homepage: https://developer.atlassian.com/cloud/trello/rest/
 
 ## Setup
 
 1. Get your API key: https://trello.com/app-key
-2. Generate a token (click "Token" link on that page)
-3. Set environment variables:
-   ```bash
-   export TRELLO_API_KEY="your-api-key"
-   export TRELLO_TOKEN="your-token"
-   ```
+2. Generate a token (click the "Token" link on that page)
+3. Export the environment variables:
 
-## Usage
+```bash
+export TRELLO_API_KEY="your-api-key"
+export TRELLO_TOKEN="your-token"
+```
 
-All commands use curl to hit the Trello REST API.
+## Common operations
 
 ### List boards
 
 ```bash
-curl -s "https://api.trello.com/1/members/me/boards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN" | jq '.[] | {name, id}'
+curl -s "https://api.trello.com/1/members/me/boards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN" \
+  | jq '.[] | {name, id}'
 ```
 
 ### List lists in a board
 
 ```bash
-curl -s "https://api.trello.com/1/boards/{boardId}/lists?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN" | jq '.[] | {name, id}'
+curl -s "https://api.trello.com/1/boards/{boardId}/lists?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN" \
+  | jq '.[] | {name, id}'
 ```
 
 ### List cards in a list
 
 ```bash
-curl -s "https://api.trello.com/1/lists/{listId}/cards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN" | jq '.[] | {name, id, desc}'
+curl -s "https://api.trello.com/1/lists/{listId}/cards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN" \
+  | jq '.[] | {name, id, desc}'
 ```
 
 ### Create a card
@@ -63,7 +53,7 @@ curl -s "https://api.trello.com/1/lists/{listId}/cards?key=$TRELLO_API_KEY&token
 ```bash
 curl -s -X POST "https://api.trello.com/1/cards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN" \
   -d "idList={listId}" \
-  -d "name=Card Title" \
+  -d "name=Card title" \
   -d "desc=Card description"
 ```
 
@@ -90,19 +80,6 @@ curl -s -X PUT "https://api.trello.com/1/cards/{cardId}?key=$TRELLO_API_KEY&toke
 
 ## Notes
 
-- Board/List/Card IDs can be found in the Trello URL or via the list commands
-- The API key and token provide full access to your Trello account - keep them secret!
-- Rate limits: 300 requests per 10 seconds per API key; 100 requests per 10 seconds per token; `/1/members` endpoints are limited to 100 requests per 900 seconds
-
-## Examples
-
-```bash
-# Get all boards
-curl -s "https://api.trello.com/1/members/me/boards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN&fields=name,id" | jq
-
-# Find a specific board by name
-curl -s "https://api.trello.com/1/members/me/boards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN" | jq '.[] | select(.name | contains("Work"))'
-
-# Get all cards on a board
-curl -s "https://api.trello.com/1/boards/{boardId}/cards?key=$TRELLO_API_KEY&token=$TRELLO_TOKEN" | jq '.[] | {name, list: .idList}'
-```
+- Board/list/card IDs can be found in the Trello URL or via the listing commands.
+- API key and token give full access to your Trello account — keep them secret!
+- Rate limits: 300 requests/10s per API key; 100 requests/10s per token.

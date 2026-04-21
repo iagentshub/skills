@@ -1,125 +1,88 @@
 ---
-name: oracle
-description: Best practices for using the oracle CLI (prompt + file bundling, engines, sessions, and file attachment patterns).
-homepage: https://askoracle.dev
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "🧿",
-        "requires": { "bins": ["oracle"] },
-        "install":
-          [
-            {
-              "id": "node",
-              "kind": "node",
-              "package": "@steipete/oracle",
-              "bins": ["oracle"],
-              "label": "Install oracle (node)",
-            },
-          ],
-      },
-  }
+id: ORACLE
+name: Oracle CLI (file-context query)
+description: Bundle a prompt with selected files to make a one-shot query to a large language model with real repository context. Useful for deep analyses that require reading a lot of code.
+icon: 🧿
+category: dev
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# oracle — best use
+# Skill: Oracle CLI
 
-Oracle bundles your prompt + selected files into one “one-shot” request so another model can answer with real repo context (API or browser automation). Treat output as advisory: verify against code + tests.
+Oracle packages your prompt and selected files into a "one-shot" query for another model to answer with real repository context. Treat the response as guidance: always verify against code and tests.
 
-## Main use case (browser, GPT‑5.2 Pro)
+## Requirements
 
-Default workflow here: `--engine browser` with GPT‑5.2 Pro in ChatGPT. This is the common “long think” path: ~10 minutes to ~1 hour is normal; expect a stored session you can reattach to.
+- `oracle` installed
 
-Recommended defaults:
+## Installation
 
-- Engine: browser (`--engine browser`)
-- Model: GPT‑5.2 Pro (`--model gpt-5.2-pro` or `--model "5.2 Pro"`)
+```bash
+npm install -g @steipete/oracle
+# or without installing
+npx -y @steipete/oracle --help
+```
 
-## Golden path
+## Recommended workflow
 
-1. Pick a tight file set (fewest files that still contain the truth).
-2. Preview payload + token spend (`--dry-run` + `--files-report`).
-3. Use browser mode for the usual GPT‑5.2 Pro workflow; use API only when you explicitly want it.
-4. If the run detaches/timeouts: reattach to the stored session (don’t re-run).
+1. Choose a minimal set of files (those containing the relevant truth).
+2. Preview the payload and token cost (`--dry-run` + `--files-report`).
+3. Run the query with the appropriate engine and model.
+4. If the session disconnects/expires, reconnect to the saved session (don't relaunch).
 
-## Commands (preferred)
+## Commands
 
-- Help:
-  - `oracle --help`
-  - If the binary isn’t installed: `npx -y @steipete/oracle --help` (avoid `pnpx` here; sqlite bindings).
+### Help
 
-- Preview (no tokens):
-  - `oracle --dry-run summary -p "<task>" --file "src/**" --file "!**/*.test.*"`
-  - `oracle --dry-run full -p "<task>" --file "src/**"`
+```bash
+oracle --help
+npx -y @steipete/oracle --help   # without prior installation
+```
 
-- Token sanity:
-  - `oracle --dry-run summary --files-report -p "<task>" --file "src/**"`
+### Preview (without spending tokens)
 
-- Browser run (main path; long-running is normal):
-  - `oracle --engine browser --model gpt-5.2-pro -p "<task>" --file "src/**"`
+```bash
+# Summary without executing
+oracle --dry-run summary -p "Describe what this function does" --file "src/**"
 
-- Manual paste fallback:
-  - `oracle --render --copy -p "<task>" --file "src/**"`
-  - Note: `--copy` is a hidden alias for `--copy-markdown`.
+# With token report
+oracle --dry-run summary --files-report -p "Task" --file "src/**"
+```
+
+### Run a query
+
+```bash
+# API mode (fast, pay per token)
+oracle -p "What does this function do and how can it be improved?" \
+  --file "app/backend/engine/runner.py" \
+  --file "app/backend/executors/**"
+
+# Render and copy to clipboard (paste manually)
+oracle --render --copy -p "Task" --file "src/**"
+```
 
 ## Attaching files (`--file`)
 
-`--file` accepts files, directories, and globs. You can pass it multiple times; entries can be comma-separated.
+`--file` accepts files, directories, and globs. Can be used multiple times:
 
-- Include:
-  - `--file "src/**"`
-  - `--file src/index.ts`
-  - `--file docs --file README.md`
+```bash
+# Include entire directory
+oracle -p "..." --file "app/backend/"
 
-- Exclude:
-  - `--file "src/**" --file "!src/**/*.test.ts" --file "!**/*.snap"`
+# Multiple paths
+oracle -p "..." --file "app/backend/engine/" --file "README.md"
 
-- Defaults (implementation behavior):
-  - Default-ignored dirs: `node_modules`, `dist`, `coverage`, `.git`, `.turbo`, `.next`, `build`, `tmp` (skipped unless explicitly passed as literal dirs/files).
-  - Honors `.gitignore` when expanding globs.
-  - Does not follow symlinks.
-  - Dotfiles filtered unless opted in via pattern (e.g. `--file ".github/**"`).
-  - Files > 1 MB rejected.
+# Exclude files
+oracle -p "..." --file "app/**" --file "!app/**/*.pyc" --file "!**/__pycache__/**"
+```
 
-## Engines (API vs browser)
+**Ignored by default:** `node_modules`, `dist`, `coverage`, `.git`, `build`, `tmp`.
+Respects `.gitignore` when expanding globs. Does not follow symlinks.
 
-- Auto-pick: `api` when `OPENAI_API_KEY` is set; otherwise `browser`.
-- Browser supports GPT + Gemini only; use `--engine api` for Claude/Grok/Codex or multi-model runs.
-- Browser attachments:
-  - `--browser-attachments auto|never|always` (auto pastes inline up to ~60k chars then uploads).
-- Remote browser host:
-  - Host: `oracle serve --host 0.0.0.0 --port 9473 --token <secret>`
-  - Client: `oracle --engine browser --remote-host <host:port> --remote-token <secret> -p "<task>" --file "src/**"`
+## Notes
 
-## Sessions + slugs
-
-- Stored under `~/.oracle/sessions` (override with `ORACLE_HOME_DIR`).
-- Runs may detach or take a long time (browser + GPT‑5.2 Pro often does). If the CLI times out: don’t re-run; reattach.
-  - List: `oracle status --hours 72`
-  - Attach: `oracle session <id> --render`
-- Use `--slug "<3-5 words>"` to keep session IDs readable.
-- Duplicate prompt guard exists; use `--force` only when you truly want a fresh run.
-
-## Prompt template (high signal)
-
-Oracle starts with **zero** project knowledge. Assume the model cannot infer your stack, build tooling, conventions, or “obvious” paths. Include:
-
-- Project briefing (stack + build/test commands + platform constraints).
-- “Where things live” (key directories, entrypoints, config files, boundaries).
-- Exact question + what you tried + the error text (verbatim).
-- Constraints (“don’t change X”, “must keep public API”, etc).
-- Desired output (“return patch plan + tests”, “give 3 options with tradeoffs”).
-
-## Safety
-
-- Don’t attach secrets by default (`.env`, key files, auth tokens). Redact aggressively; share only what’s required.
-
-## “Exhaustive prompt” restoration pattern
-
-For long investigations, write a standalone prompt + file set so you can rerun days later:
-
-- 6–30 sentence project briefing + the goal.
-- Repro steps + exact errors + what you tried.
-- Attach all context files needed (entrypoints, configs, key modules, docs).
-
-Oracle runs are one-shot; the model doesn’t remember prior runs. “Restoring context” means re-running with the same prompt + `--file …` set (or reattaching a still-running stored session).
+- Choose the minimal set of files containing the needed information; more files = more tokens.
+- `--render --copy` mode generates the prompt to clipboard for pasting into any chat.
+- Always use `--dry-run` before large queries to estimate cost.
+- Treat responses as guidance; always verify in the actual code.

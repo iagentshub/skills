@@ -1,87 +1,91 @@
 ---
-name: sag
-description: ElevenLabs text-to-speech with mac-style say UX.
-homepage: https://sag.sh
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "🔊",
-        "requires": { "bins": ["sag"], "env": ["ELEVENLABS_API_KEY"] },
-        "primaryEnv": "ELEVENLABS_API_KEY",
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "steipete/tap/sag",
-              "bins": ["sag"],
-              "label": "Install sag (brew)",
-            },
-          ],
-      },
-  }
+id: TEXT_TO_SPEECH
+name: Text to Speech with ElevenLabs (sag)
+description: Convert text to speech with ElevenLabs using the sag CLI, with UX similar to macOS say command. Multiple voices, models, and expressive audio tags. Requires ELEVENLABS_API_KEY.
+icon: 🔊
+category: media
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# sag
+# Skill: Text to Speech with ElevenLabs (sag)
 
-Use `sag` for ElevenLabs TTS with local playback.
+Use `sag` for speech synthesis with ElevenLabs and local playback.
 
-API key (required)
+## Requirements
 
-- `ELEVENLABS_API_KEY` (preferred)
-- `SAG_API_KEY` also supported by the CLI
+- `sag` installed
+- `ELEVENLABS_API_KEY` or `SAG_API_KEY` configured
 
-Quick start
-
-- `sag "Hello there"`
-- `sag speak -v "Roger" "Hello"`
-- `sag voices`
-- `sag prompting` (model-specific tips)
-
-Model notes
-
-- Default: `eleven_v3` (expressive)
-- Stable: `eleven_multilingual_v2`
-- Fast: `eleven_flash_v2_5`
-
-Pronunciation + delivery rules
-
-- First fix: respell (e.g. "key-note"), add hyphens, adjust casing.
-- Numbers/units/URLs: `--normalize auto` (or `off` if it harms names).
-- Language bias: `--lang en|de|fr|...` to guide normalization.
-- v3: SSML `<break>` not supported; use `[pause]`, `[short pause]`, `[long pause]`.
-- v2/v2.5: SSML `<break time="1.5s" />` supported; `<phoneme>` not exposed in `sag`.
-
-v3 audio tags (put at the entrance of a line)
-
-- `[whispers]`, `[shouts]`, `[sings]`
-- `[laughs]`, `[starts laughing]`, `[sighs]`, `[exhales]`
-- `[sarcastic]`, `[curious]`, `[excited]`, `[crying]`, `[mischievously]`
-- Example: `sag "[whispers] keep this quiet. [short pause] ok?"`
-
-Voice defaults
-
-- `ELEVENLABS_VOICE_ID` or `SAG_VOICE_ID`
-
-Confirm voice + speaker before long output.
-
-## Chat voice responses
-
-When the user asks for a "voice" reply (e.g., "crazy scientist voice", "explain in voice"), generate audio and send it:
+## Installation
 
 ```bash
-# Generate audio file
-sag -v Clawd -o /tmp/voice-reply.mp3 "Your message here"
-
-# Then include in reply:
-# MEDIA:/tmp/voice-reply.mp3
+brew install steipete/tap/sag
 ```
 
-Voice character tips:
+## Basic usage
 
-- Crazy scientist: Use `[excited]` tags, dramatic pauses `[short pause]`, vary intensity
-- Calm: Use `[whispers]` or slower pacing
-- Dramatic: Use `[sings]` or `[shouts]` sparingly
+```bash
+# Simple text (default voice)
+sag "Hello, this is a test"
 
-Default voice for Clawd: `lj2rcrvANS3gaWWnczSX` (or just `-v Clawd`)
+# With specific voice
+sag speak -v "Roger" "Hello, I'm Roger"
+
+# List available voices
+sag voices
+
+# View pronunciation tips per model
+sag prompting
+```
+
+## Available models
+
+| Model | Description |
+|-------|-------------|
+| `eleven_v3` | Expressive (default) |
+| `eleven_multilingual_v2` | Stable and multilingual |
+| `eleven_flash_v2_5` | Fast and economical |
+
+```bash
+# Specify model
+sag speak --model eleven_multilingual_v2 "Text in English"
+```
+
+## Expressive audio tags (v3 only)
+
+Place at the start of a line:
+
+```bash
+sag "[whispers] this is a secret. [short pause] understood?"
+sag "[excited] We won the championship!"
+sag "[sarcastic] sure, great idea..."
+```
+
+Available tags: `[whispers]`, `[shouts]`, `[sings]`, `[laughs]`, `[chuckles]`, `[sighs]`, `[exhales]`, `[sarcastic]`, `[curious]`, `[excited]`, `[crying]`, `[with malice]`
+
+Pauses (v3): `[pause]`, `[short pause]`, `[long pause]`
+Pauses (v2/v2.5): SSML `<break time="1.5s" />`
+
+## Pronunciation and settings
+
+```bash
+# Automatic number/unit normalization
+sag --normalize auto "It's 3.5 km or 3500 meters"
+
+# Fix language for normalization
+sag --lang en "That costs $1,500 per unit"
+```
+
+## Save to file
+
+```bash
+# Save without playing
+sag speak --output /tmp/output.mp3 "Text to save"
+```
+
+## Notes
+
+- `ELEVENLABS_API_KEY` can also be set as `SAG_API_KEY`.
+- The default model is `eleven_v3`; use `eleven_multilingual_v2` for better stability.
+- Run `sag --help` for the full reference.

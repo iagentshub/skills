@@ -1,122 +1,86 @@
 ---
-name: imsg
-description: iMessage/SMS CLI for listing chats, history, and sending messages via Messages.app.
-homepage: https://imsg.to
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "📨",
-        "os": ["darwin"],
-        "requires": { "bins": ["imsg"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "steipete/tap/imsg",
-              "bins": ["imsg"],
-              "label": "Install imsg (brew)",
-            },
-          ],
-      },
-  }
+id: IMESSAGE
+name: iMessage / SMS (imsg)
+description: Read and send iMessage/SMS on macOS using the imsg CLI via Messages.app. macOS only with Messages signed into an Apple ID account.
+icon: 📨
+category: messaging
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# imsg
+# Skill: iMessage / SMS (imsg)
 
-Use `imsg` to read and send iMessage/SMS via macOS Messages.app.
+> ⚠️ **macOS only.** Requires Messages.app signed in with an Apple ID.
 
-## When to Use
+Use `imsg` to read and send iMessage/SMS via the macOS Messages app.
+
+## When to use
 
 ✅ **USE this skill when:**
 
-- User explicitly asks to send iMessage or SMS
+- User explicitly asks to send an iMessage or SMS
 - Reading iMessage conversation history
-- Checking recent Messages.app chats
+- Checking recent chats in Messages.app
 - Sending to phone numbers or Apple IDs
 
-## When NOT to Use
+## When NOT to use
 
 ❌ **DON'T use this skill when:**
 
-- Telegram messages → use `message` tool with `channel:telegram`
-- Signal messages → use Signal channel if configured
-- WhatsApp messages → use WhatsApp channel if configured
-- Discord messages → use `message` tool with `channel:discord`
-- Slack messages → use `slack` skill
-- Group chat management (adding/removing members) → not supported
-- Bulk/mass messaging → always confirm with user first
-- Replying in current conversation → just reply normally (OpenClaw routes automatically)
+- Telegram, Signal, WhatsApp, or Discord messages → use their respective channels
+- Group management (add/remove members) → not supported
+- Bulk messaging → always confirm with the user first
+- User is chatting with you via iMessage → reply normally
 
 ## Requirements
 
 - macOS with Messages.app signed in
-- Full Disk Access for terminal
+- Full Disk Access for the terminal
 - Automation permission for Messages.app (for sending)
 
-## Common Commands
+## Installation
 
-### List Chats
+```bash
+brew install steipete/tap/imsg
+```
+
+## Commands
+
+### List chats
 
 ```bash
 imsg chats --limit 10 --json
 ```
 
-### View History
+### View conversation history
 
 ```bash
 # By chat ID
 imsg history --chat-id 1 --limit 20 --json
 
-# With attachments info
+# With attachment info
 imsg history --chat-id 1 --limit 20 --attachments --json
 ```
 
-### Watch for New Messages
+### Send message
+
+```bash
+# To phone number
+imsg send --to "+15551234567" --message "Hello, are you available?"
+
+# To Apple ID (email)
+imsg send --to "person@icloud.com" --message "Sending the documents now"
+```
+
+### Monitor new messages
 
 ```bash
 imsg watch --chat-id 1 --attachments
 ```
 
-### Send Messages
+## Notes
 
-```bash
-# Text only
-imsg send --to "+14155551212" --text "Hello!"
-
-# With attachment
-imsg send --to "+14155551212" --text "Check this out" --file /path/to/image.jpg
-
-# Specify service
-imsg send --to "+14155551212" --text "Hi" --service imessage
-imsg send --to "+14155551212" --text "Hi" --service sms
-```
-
-## Service Options
-
-- `--service imessage` — Force iMessage (requires recipient has iMessage)
-- `--service sms` — Force SMS (green bubble)
-- `--service auto` — Let Messages.app decide (default)
-
-## Safety Rules
-
-1. **Always confirm recipient and message content** before sending
-2. **Never send to unknown numbers** without explicit user approval
-3. **Be careful with attachments** — confirm file path exists
-4. **Rate limit yourself** — don't spam
-
-## Example Workflow
-
-User: "Text mom that I'll be late"
-
-```bash
-# 1. Find mom's chat
-imsg chats --limit 20 --json | jq '.[] | select(.displayName | contains("Mom"))'
-
-# 2. Confirm with user
-# "Found Mom at +1555123456. Send 'I'll be late' via iMessage?"
-
-# 3. Send after confirmation
-imsg send --to "+1555123456" --text "I'll be late"
-```
+- Get chat ID with `imsg chats --limit 20`.
+- Messages are sent via Messages.app (not directly to Apple's network).
+- Always confirm recipient and message before sending.
+- macOS only; does not work on Linux or Windows.

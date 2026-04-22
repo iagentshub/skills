@@ -1,62 +1,80 @@
 ---
-name: openai-whisper-api
-description: Transcribe audio via OpenAI Audio Transcriptions API (Whisper).
-homepage: https://platform.openai.com/docs/guides/speech-to-text
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "🌐",
-        "requires": { "bins": ["curl"], "env": ["OPENAI_API_KEY"] },
-        "primaryEnv": "OPENAI_API_KEY",
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "curl",
-              "bins": ["curl"],
-              "label": "Install curl (brew)",
-            },
-          ],
-      },
-  }
+id: API_TRANSCRIPTION
+name: Audio Transcription via API (Whisper)
+description: Transcribe audio via the OpenAI Audio Transcriptions API (Whisper). Requires OPENAI_API_KEY. Ideal when you don't want to install local dependencies.
+icon: 🌐
+category: media
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# OpenAI Whisper API (curl)
+# Skill: Audio Transcription via API (Whisper)
 
-Transcribe an audio file via OpenAI’s `/v1/audio/transcriptions` endpoint. Set `OPENAI_BASE_URL` to use an OpenAI-compatible proxy or local gateway.
+Transcribe audio files using OpenAI's `/v1/audio/transcriptions` endpoint (model `whisper-1`).
 
-## Quick start
+## Requirements
 
-```bash
-{baseDir}/scripts/transcribe.sh /path/to/audio.m4a
-```
+- `curl` on PATH
+- `OPENAI_API_KEY` environment variable set
 
-Defaults:
-
-- Model: `whisper-1`
-- Output: `<input>.txt`
-
-## Useful flags
+## Basic usage
 
 ```bash
-{baseDir}/scripts/transcribe.sh /path/to/audio.ogg --model whisper-1 --out /tmp/transcript.txt
-{baseDir}/scripts/transcribe.sh /path/to/audio.m4a --language en
-{baseDir}/scripts/transcribe.sh /path/to/audio.m4a --prompt "Speaker names: Peter, Daniel"
-{baseDir}/scripts/transcribe.sh /path/to/audio.m4a --json --out /tmp/transcript.json
+curl -X POST https://api.openai.com/v1/audio/transcriptions \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -F file=@/path/to/audio.m4a \
+  -F model=whisper-1
 ```
 
-## API key
+## With additional parameters
 
-Set `OPENAI_API_KEY`, or configure it in the active OpenClaw config file (`$OPENCLAW_CONFIG_PATH`, default `~/.openclaw/openclaw.json`). Optionally set `OPENAI_BASE_URL` (for example `http://127.0.0.1:51805/v1`) to use an OpenAI-compatible proxy or local gateway:
+```bash
+# Specify language (improves accuracy)
+curl -X POST https://api.openai.com/v1/audio/transcriptions \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -F file=@audio.mp3 \
+  -F model=whisper-1 \
+  -F language=en
 
-```json5
-{
-  skills: {
-    "openai-whisper-api": {
-      apiKey: "OPENAI_KEY_HERE",
-    },
-  },
-}
+# With prompt to guide the transcription
+curl -X POST https://api.openai.com/v1/audio/transcriptions \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -F file=@audio.mp3 \
+  -F model=whisper-1 \
+  -F prompt="Sales meeting with John Smith and Jane Doe"
+
+# JSON response with timestamps
+curl -X POST https://api.openai.com/v1/audio/transcriptions \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -F file=@audio.mp3 \
+  -F model=whisper-1 \
+  -F response_format=verbose_json
 ```
+
+## Save result to file
+
+```bash
+curl -X POST https://api.openai.com/v1/audio/transcriptions \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -F file=@meeting.m4a \
+  -F model=whisper-1 \
+  -o transcription.txt
+```
+
+## Response formats
+
+- `json` (default): `{"text": "transcription here"}`
+- `text`: plain text
+- `srt`: SRT subtitles
+- `vtt`: VTT subtitles
+- `verbose_json`: JSON with segments and timestamps
+
+## Supported audio formats
+
+mp3, mp4, mpeg, mpga, m4a, wav, webm (max 25 MB per file).
+
+## Notes
+
+- If the file exceeds 25 MB, split it with `ffmpeg` before uploading.
+- `OPENAI_BASE_URL` can point to a proxy or local gateway compatible with the OpenAI API.
+- Never share or print the value of `OPENAI_API_KEY` in logs or agent output.

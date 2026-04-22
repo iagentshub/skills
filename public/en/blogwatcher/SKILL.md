@@ -1,69 +1,61 @@
 ---
-name: blogwatcher
-description: Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.
-homepage: https://github.com/Hyaxia/blogwatcher
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "📰",
-        "requires": { "bins": ["blogwatcher"] },
-        "install":
-          [
-            {
-              "id": "go",
-              "kind": "go",
-              "module": "github.com/Hyaxia/blogwatcher/cmd/blogwatcher@latest",
-              "bins": ["blogwatcher"],
-              "label": "Install blogwatcher (go)",
-            },
-          ],
-      },
-  }
+id: BLOGWATCHER
+name: Blog & RSS Feed Monitor
+description: Monitor blogs and RSS/Atom feeds for new posts using the blogwatcher CLI. Allows adding blogs, scanning for updates, and marking articles as read.
+icon: 📰
+category: data
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# blogwatcher
+# Blog & RSS Feed Monitor (blogwatcher)
 
-Track blog and RSS/Atom feed updates with the `blogwatcher` CLI.
+Use `blogwatcher` to track blogs and RSS/Atom feeds and detect new posts.
 
-Install
+## Installation
 
-- Go: `go install github.com/Hyaxia/blogwatcher/cmd/blogwatcher@latest`
-
-Quick start
-
-- `blogwatcher --help`
-
-Common commands
-
-- Add a blog: `blogwatcher add "My Blog" https://example.com`
-- List blogs: `blogwatcher blogs`
-- Scan for updates: `blogwatcher scan`
-- List articles: `blogwatcher articles`
-- Mark an article read: `blogwatcher read 1`
-- Mark all articles read: `blogwatcher read-all`
-- Remove a blog: `blogwatcher remove "My Blog"`
-
-Example output
-
-```
-$ blogwatcher blogs
-Tracked blogs (1):
-
-  xkcd
-    URL: https://xkcd.com
+```bash
+go install github.com/Hyaxia/blogwatcher/cmd/blogwatcher@latest
 ```
 
+## Common commands
+
+```bash
+# Add a blog/feed
+blogwatcher add "Blog Name" https://example.com
+blogwatcher add "Hacker News" https://news.ycombinator.com/rss
+
+# List monitored blogs
+blogwatcher blogs
+
+# Scan for updates
+blogwatcher scan
+
+# View articles (includes new ones)
+blogwatcher articles
+
+# Mark article as read (by ID)
+blogwatcher read 1
+
+# Mark all as read
+blogwatcher read-all
+
+# Remove a blog
+blogwatcher remove "Blog Name"
 ```
-$ blogwatcher scan
-Scanning 1 blog(s)...
 
-  xkcd
-    Source: RSS | Found: 4 | New: 4
+## Example workflow
 
-Found 4 new article(s) total!
+```bash
+# 1. Add sources of interest
+blogwatcher add "Python Weekly" https://pythonweekly.com/rss
+
+# 2. Scan at the start of the day
+blogwatcher scan
+
+# 3. Check new posts
+blogwatcher articles
+
+# 4. Mark as read
+blogwatcher read-all
 ```
-
-Notes
-
-- Use `blogwatcher <command> --help` to discover flags and options.

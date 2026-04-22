@@ -1,38 +1,18 @@
 ---
-name: github
-description: "GitHub operations via `gh` CLI: issues, PRs, CI runs, code review, API queries. Use when: (1) checking PR status or CI, (2) creating/commenting on issues, (3) listing/filtering PRs or issues, (4) viewing run logs. NOT for: complex web UI interactions requiring manual browser flows (use browser tooling when available), bulk operations across many repos (script with gh api), or when gh auth is not configured."
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "🐙",
-        "requires": { "bins": ["gh"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "gh",
-              "bins": ["gh"],
-              "label": "Install GitHub CLI (brew)",
-            },
-            {
-              "id": "apt",
-              "kind": "apt",
-              "package": "gh",
-              "bins": ["gh"],
-              "label": "Install GitHub CLI (apt)",
-            },
-          ],
-      },
-  }
+id: GITHUB
+name: GitHub
+description: "GitHub operations with the gh CLI: issues, PRs, CI runs, code reviews, and API queries. Use when: checking PR or CI status, creating/commenting issues, listing PRs, viewing run logs. NOT for: local git operations (commit, push, pull), cloning repos, or when gh is not authenticated."
+icon: 🐙
+category: dev
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# GitHub Skill
+# GitHub
 
-Use the `gh` CLI to interact with GitHub repositories, issues, PRs, and CI.
+Use the `gh` CLI to interact with repositories, issues, PRs, and GitHub CI.
 
-## When to Use
+## When to use
 
 ✅ **USE this skill when:**
 
@@ -40,30 +20,28 @@ Use the `gh` CLI to interact with GitHub repositories, issues, PRs, and CI.
 - Viewing CI/workflow run status and logs
 - Creating, closing, or commenting on issues
 - Creating or merging pull requests
-- Querying GitHub API for repository data
+- Querying the GitHub API for repository data
 - Listing repos, releases, or collaborators
-
-## When NOT to Use
 
 ❌ **DON'T use this skill when:**
 
 - Local git operations (commit, push, pull, branch) → use `git` directly
-- Non-GitHub repos (GitLab, Bitbucket, self-hosted) → different CLIs
-- Cloning repositories → use `git clone`
-- Reviewing actual code changes → use `coding-agent` skill
-- Complex multi-file diffs → use `coding-agent` or read files directly
+- Non-GitHub repos (GitLab, Bitbucket, self-hosted)
+- Cloning repos → use `git clone`
+- Reviewing code changes → use the coding agent
+- Large multi-file diffs → read the files directly
 
 ## Setup
 
 ```bash
-# Authenticate (one-time)
+# Authenticate (once)
 gh auth login
 
 # Verify
 gh auth status
 ```
 
-## Common Commands
+## Common commands
 
 ### Pull Requests
 
@@ -71,14 +49,14 @@ gh auth status
 # List PRs
 gh pr list --repo owner/repo
 
-# Check CI status
+# Check CI for a PR
 gh pr checks 55 --repo owner/repo
 
 # View PR details
 gh pr view 55 --repo owner/repo
 
 # Create PR
-gh pr create --title "feat: add feature" --body "Description"
+gh pr create --title "feat: new feature" --body "Description"
 
 # Merge PR
 gh pr merge 55 --squash --repo owner/repo
@@ -97,7 +75,7 @@ gh issue create --title "Bug: something broken" --body "Details..."
 gh issue close 42 --repo owner/repo
 ```
 
-### CI/Workflow Runs
+### CI/Workflow runs
 
 ```bash
 # List recent runs
@@ -113,51 +91,12 @@ gh run view <run-id> --repo owner/repo --log-failed
 gh run rerun <run-id> --failed --repo owner/repo
 ```
 
-### API Queries
+### API queries
 
 ```bash
-# Get PR with specific fields
+# Get a PR with specific fields
 gh api repos/owner/repo/pulls/55 --jq '.title, .state, .user.login'
 
 # List all labels
 gh api repos/owner/repo/labels --jq '.[].name'
-
-# Get repo stats
-gh api repos/owner/repo --jq '{stars: .stargazers_count, forks: .forks_count}'
 ```
-
-## JSON Output
-
-Most commands support `--json` for structured output with `--jq` filtering:
-
-```bash
-gh issue list --repo owner/repo --json number,title --jq '.[] | "\(.number): \(.title)"'
-gh pr list --json number,title,state,mergeable --jq '.[] | select(.mergeable == "MERGEABLE")'
-```
-
-## Templates
-
-### PR Review Summary
-
-```bash
-# Get PR overview for review
-PR=55 REPO=owner/repo
-echo "## PR #$PR Summary"
-gh pr view $PR --repo $REPO --json title,body,author,additions,deletions,changedFiles \
-  --jq '"**\(.title)** by @\(.author.login)\n\n\(.body)\n\n📊 +\(.additions) -\(.deletions) across \(.changedFiles) files"'
-gh pr checks $PR --repo $REPO
-```
-
-### Issue Triage
-
-```bash
-# Quick issue triage view
-gh issue list --repo owner/repo --state open --json number,title,labels,createdAt \
-  --jq '.[] | "[\(.number)] \(.title) - \([.labels[].name] | join(", ")) (\(.createdAt[:10]))"'
-```
-
-## Notes
-
-- Always specify `--repo owner/repo` when not in a git directory
-- Use URLs directly: `gh pr view https://github.com/owner/repo/pull/55`
-- Rate limits apply; use `gh api --cache 1h` for repeated queries

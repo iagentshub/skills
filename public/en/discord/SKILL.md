@@ -1,61 +1,58 @@
 ---
-name: discord
-description: "Discord ops via the message tool (channel=discord)."
-metadata: { "openclaw": { "emoji": "🎮", "requires": { "config": ["channels.discord.token"] } } }
-allowed-tools: ["message"]
+id: DISCORD
+name: Discord
+description: "Discord operations: send/edit/delete messages, react, pin, read channels, manage roles, and moderate. Requires a Discord bot token configured as a channel."
+icon: 🎮
+category: messaging
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# Discord (Via `message`)
+# Discord
 
-Use the `message` tool. No provider-specific `discord` tool exposed to the agent.
+Discord operations via the messaging tool with `channel: "discord"`.
 
-## Musts
+## Key rules
 
-- Always: `channel: "discord"`.
-- Respect gating: `channels.discord.actions.*` (some default off: `roles`, `moderation`, `presence`, `channels`).
-- Prefer explicit ids: `guildId`, `channelId`, `messageId`, `userId`.
-- Multi-account: optional `accountId`.
-
-## Guidelines
-
+- Always use `channel: "discord"`.
+- Prefer explicit IDs: `guildId`, `channelId`, `messageId`, `userId`.
 - Avoid Markdown tables in outbound Discord messages.
 - Mention users as `<@USER_ID>`.
-- Prefer Discord components v2 (`components`) for rich UI; use legacy `embeds` only when you must.
+- Prefer Discord components v2 (`components`) for rich UI; use `embeds` (legacy) only when necessary.
+- Multi-account: use optional `accountId`.
 
 ## Targets
 
 - Send-like actions: `to: "channel:<id>"` or `to: "user:<id>"`.
-- Message-specific actions: `channelId: "<id>"` (or `to`) + `messageId: "<id>"`.
+- Message-specific actions: `channelId: "<id>"` + `messageId: "<id>"`.
 
-## Common Actions (Examples)
+## Common actions
 
-Send message:
+### Send a message
 
 ```json
 {
   "action": "send",
   "channel": "discord",
   "to": "channel:123",
-  "message": "hello",
+  "message": "Hello from the agent",
   "silent": true
 }
 ```
 
-Send with media:
+### Send with attachment
 
 ```json
 {
   "action": "send",
   "channel": "discord",
   "to": "channel:123",
-  "message": "see attachment",
+  "message": "See attachment",
   "media": "file:///tmp/example.png"
 }
 ```
 
-- Optional `silent: true` to suppress Discord notifications.
-
-Send with components v2 (recommended for rich UI):
+### Send with components v2 (recommended for rich UI)
 
 ```json
 {
@@ -67,24 +64,9 @@ Send with components v2 (recommended for rich UI):
 }
 ```
 
-- `components` expects Carbon component instances (Container, TextDisplay, etc.) from JS/TS integrations.
-- Do not combine `components` with `embeds` (Discord rejects v2 + embeds).
+> Do not combine `components` with `embeds` (Discord rejects them together).
 
-Legacy embeds (not recommended):
-
-```json
-{
-  "action": "send",
-  "channel": "discord",
-  "to": "channel:123",
-  "message": "Status update",
-  "embeds": [{ "title": "Legacy", "description": "Embeds are legacy." }]
-}
-```
-
-- `embeds` are ignored when components v2 are present.
-
-React:
+### React to a message
 
 ```json
 {
@@ -96,18 +78,18 @@ React:
 }
 ```
 
-Read:
+### Read recent messages
 
 ```json
 {
   "action": "read",
   "channel": "discord",
-  "to": "channel:123",
+  "channelId": "123",
   "limit": 20
 }
 ```
 
-Edit / delete:
+### Edit a message
 
 ```json
 {
@@ -115,9 +97,11 @@ Edit / delete:
   "channel": "discord",
   "channelId": "123",
   "messageId": "456",
-  "message": "fixed typo"
+  "message": "Updated text"
 }
 ```
+
+### Delete a message
 
 ```json
 {
@@ -128,21 +112,7 @@ Edit / delete:
 }
 ```
 
-Poll:
-
-```json
-{
-  "action": "poll",
-  "channel": "discord",
-  "to": "channel:123",
-  "pollQuestion": "Lunch?",
-  "pollOption": ["Pizza", "Sushi", "Salad"],
-  "pollMulti": false,
-  "pollDurationHours": 24
-}
-```
-
-Pins:
+### Pin a message
 
 ```json
 {
@@ -153,7 +123,7 @@ Pins:
 }
 ```
 
-Threads:
+### Create a thread
 
 ```json
 {
@@ -165,7 +135,7 @@ Threads:
 }
 ```
 
-Search:
+### Search
 
 ```json
 {
@@ -177,21 +147,3 @@ Search:
   "limit": 10
 }
 ```
-
-Presence (often gated):
-
-```json
-{
-  "action": "set-presence",
-  "channel": "discord",
-  "activityType": "playing",
-  "activityName": "with fire",
-  "status": "online"
-}
-```
-
-## Writing Style (Discord)
-
-- Short, conversational, low ceremony.
-- No markdown tables.
-- Mention users as `<@USER_ID>`.

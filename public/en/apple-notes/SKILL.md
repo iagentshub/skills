@@ -1,77 +1,86 @@
 ---
-name: apple-notes
-description: Manage Apple Notes via the `memo` CLI on macOS (create, view, edit, delete, search, move, and export notes). Use when a user asks OpenClaw to add a note, list notes, search notes, or manage note folders.
-homepage: https://github.com/antoniorodr/memo
-metadata:
-  {
-    "openclaw":
-      {
-        "emoji": "📝",
-        "os": ["darwin"],
-        "requires": { "bins": ["memo"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "antoniorodr/memo/memo",
-              "bins": ["memo"],
-              "label": "Install memo via Homebrew",
-            },
-          ],
-      },
-  }
+id: APPLE_NOTES
+name: Apple Notes
+description: "Manage Apple Notes via the memo CLI on macOS: create, view, edit, delete, search, move, and export notes. macOS-only with Notes.app accessible."
+icon: 🍎
+category: notes
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
 # Apple Notes CLI
 
-Use `memo notes` to manage Apple Notes directly from the terminal. Create, view, edit, delete, search, move notes between folders, and export to HTML/Markdown.
+Use `memo notes` to manage Apple Notes directly from the terminal.
+Create, view, edit, delete, search, move notes between folders, and export to HTML/Markdown.
 
-Setup
+**macOS only.** Homepage: https://github.com/antoniorodr/memo
 
-- Install (Homebrew): `brew tap antoniorodr/memo && brew install antoniorodr/memo/memo`
-- Manual (pip): `pip install .` (after cloning the repo)
-- macOS-only; if prompted, grant Automation access to Notes.app.
+## Installation
 
-View Notes
+```bash
+# Homebrew (recommended)
+brew tap antoniorodr/memo && brew install antoniorodr/memo/memo
 
-- List all notes: `memo notes`
-- Filter by folder: `memo notes -f "Folder Name"`
-- Search notes (fuzzy): `memo notes -s "query"`
+# Manual (pip, after cloning the repo)
+pip install .
+```
 
-Create Notes
+If prompted, grant Automation access to Notes.app in:
+**System Settings → Privacy & Security → Automation**
 
-- Add a new note: `memo notes -a`
-  - Opens an interactive editor to compose the note.
-- Quick add with title: `memo notes -a "Note Title"`
+## View notes
 
-Edit Notes
+```bash
+# List all notes
+memo notes
 
-- Edit existing note: `memo notes -e`
-  - Interactive selection of note to edit.
+# Filter by folder
+memo notes -f "Folder Name"
 
-Delete Notes
+# Search notes (fuzzy)
+memo notes -s "query"
+```
 
-- Delete a note: `memo notes -d`
-  - Interactive selection of note to delete.
+## Create notes
 
-Move Notes
+```bash
+# New note with interactive editor
+memo notes -a
 
-- Move note to folder: `memo notes -m`
-  - Interactive selection of note and destination folder.
+# Quick add with title
+memo notes -a "Note Title"
+```
 
-Export Notes
+## Edit notes
 
-- Export to HTML/Markdown: `memo notes -ex`
-  - Exports selected note; uses Mistune for markdown processing.
+```bash
+# Edit note (interactive selection)
+memo notes -e
+```
 
-Limitations
+## Delete notes
 
-- Cannot edit notes containing images or attachments.
-- Interactive prompts may require terminal access.
+```bash
+# Delete note (interactive selection)
+memo notes -d
+```
 
-Notes
+## Move notes
+
+```bash
+# Move note to folder (interactive selection)
+memo notes -m
+```
+
+## Export notes
+
+```bash
+# Export to HTML/Markdown (interactive selection)
+memo notes -ex
+```
+
+## Notes
 
 - macOS-only.
-- Requires Apple Notes.app to be accessible.
-- For automation, grant permissions in System Settings > Privacy & Security > Automation.
+- Cannot edit notes containing images or attachments.
+- Requires Notes.app accessible; grant Automation permission if prompted.

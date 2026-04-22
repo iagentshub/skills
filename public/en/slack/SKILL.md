@@ -1,34 +1,34 @@
 ---
-name: slack
-description: Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.
-metadata: { "openclaw": { "emoji": "💬", "requires": { "config": ["channels.slack"] } } }
+id: SLACK
+name: Slack
+description: "Slack operations: send/edit/delete messages, react, pin messages, read conversations, and get member info. Requires a Slack bot token configured as a channel."
+icon: 💬
+category: messaging
+created_at: "2026-04-22"
+updated_at: "2026-04-22"
 ---
 
-# Slack Actions
+# Slack
 
-## Overview
+Use Slack actions to react, manage pinned messages, send/edit/delete messages, and get member information.
 
-Use `slack` to react, manage pins, send/edit/delete messages, and fetch member info. The tool uses the bot token configured for OpenClaw.
-
-## Inputs to collect
+## Data to collect
 
 - `channelId` and `messageId` (Slack message timestamp, e.g. `1712023032.1234`).
 - For reactions, an `emoji` (Unicode or `:name:`).
-- For message sends, a `to` target (`channel:<id>` or `user:<id>`) and `content`.
+- For message sends, a `to` destination (`channel:<id>` or `user:<id>`) and `content`.
 
-Message context lines include `slack message id` and `channel` fields you can reuse directly.
+## Action groups
 
-## Actions
+| Group | Default | Notes |
+|-------|---------|-------|
+| reactions | active | React + list reactions |
+| messages | active | Read/send/edit/delete |
+| pins | active | Pin/unpin/list |
+| memberInfo | active | Member info |
+| emojiList | active | Custom emoji list |
 
-### Action groups
-
-| Action group | Default | Notes                  |
-| ------------ | ------- | ---------------------- |
-| reactions    | enabled | React + list reactions |
-| messages     | enabled | Read/send/edit/delete  |
-| pins         | enabled | Pin/unpin/list         |
-| memberInfo   | enabled | Member info            |
-| emojiList    | enabled | Custom emoji list      |
+## Common actions
 
 ### React to a message
 
@@ -57,7 +57,7 @@ Message context lines include `slack message id` and `channel` fields you can re
 {
   "action": "sendMessage",
   "to": "channel:C123",
-  "content": "Hello from OpenClaw"
+  "content": "Hello from the agent"
 }
 ```
 
@@ -112,7 +112,7 @@ Message context lines include `slack message id` and `channel` fields you can re
 }
 ```
 
-### List pinned items
+### List pinned messages
 
 ```json
 {
@@ -121,7 +121,7 @@ Message context lines include `slack message id` and `channel` fields you can re
 }
 ```
 
-### Member info
+### Get member info
 
 ```json
 {
@@ -129,16 +129,3 @@ Message context lines include `slack message id` and `channel` fields you can re
   "userId": "U123"
 }
 ```
-
-### Emoji list
-
-```json
-{
-  "action": "emojiList"
-}
-```
-
-## Ideas to try
-
-- React with ✅ to mark completed tasks.
-- Pin key decisions or weekly status updates.

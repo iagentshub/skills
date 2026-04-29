@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="../README.md">← README</a> &nbsp;·&nbsp;
+  <a href="es/index.md">← Índice</a> &nbsp;·&nbsp;
   <a href="en.md">🇬🇧 Read in English</a>
 </div>
 

@@ -8,7 +8,7 @@
 <h1 align="center">Skills Catalog — English</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/skills-33-6366f1?style=flat-square" alt="Skills">
+  <img src="https://img.shields.io/badge/skills-34-6366f1?style=flat-square" alt="Skills">
   <img src="https://img.shields.io/badge/language-English-0891b2?style=flat-square" alt="Language">
 </p>
 
@@ -63,6 +63,7 @@ Required fields: `name`, `description`. Optional: `icon`, `category`, `homepage`
 | [apple-notes](../public/en/apple-notes/SKILL.md) | ![notes](https://img.shields.io/badge/notes-CA8A04?style=flat-square&logoColor=white) | Manage Apple Notes via the `memo` CLI on macOS (create, view, edit, delete, search, move, export). |
 | [apple-reminders](../public/en/apple-reminders/SKILL.md) | ![productivity](https://img.shields.io/badge/productivity-DC2626?style=flat-square&logoColor=white) | Manage Apple Reminders via remindctl CLI (list, add, edit, complete, delete). |
 | [bear-notes](../public/en/bear-notes/SKILL.md) | ![notes](https://img.shields.io/badge/notes-CA8A04?style=flat-square&logoColor=white) | Create, search, and manage Bear notes via grizzly CLI. |
+| [caveman](../public/en/caveman/SKILL.md) | ![productivity](https://img.shields.io/badge/productivity-DC2626?style=flat-square&logoColor=white) | Ultra-compressed communication mode that reduces token usage up to 75% while keeping full technical accuracy. Activated with `/caveman`. Three intensity levels: lite, full, and ultra. |
 | [blogwatcher](../public/en/blogwatcher/SKILL.md) | ![productivity](https://img.shields.io/badge/productivity-DC2626?style=flat-square&logoColor=white) | Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI. |
 | [camsnap](../public/en/camsnap/SKILL.md) | ![media](https://img.shields.io/badge/media-EA580C?style=flat-square&logoColor=white) | Capture frames or clips from RTSP/ONVIF cameras. |
 | [coding-agent](../public/en/coding-agent/SKILL.md) | ![ai](https://img.shields.io/badge/ai-7C3AED?style=flat-square&logoColor=white) | Delegate coding tasks to Codex, Claude Code, or Pi agents via background process. |

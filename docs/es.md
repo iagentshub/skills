@@ -8,7 +8,7 @@
 <h1 align="center">Catálogo de Skills — Español</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/skills-33-6366f1?style=flat-square" alt="Skills">
+  <img src="https://img.shields.io/badge/skills-34-6366f1?style=flat-square" alt="Skills">
   <img src="https://img.shields.io/badge/idioma-Español-DC2626?style=flat-square" alt="Idioma">
 </p>
 
@@ -63,6 +63,7 @@ Campos obligatorios: `name`, `description`. Opcionales: `icon`, `category`, `hom
 | [apple-notes](../public/es/apple-notes/SKILL.md) | ![notes](https://img.shields.io/badge/notes-CA8A04?style=flat-square&logoColor=white) | Gestiona notas de Apple Notes mediante el CLI memo en macOS. |
 | [apple-reminders](../public/es/apple-reminders/SKILL.md) | ![productivity](https://img.shields.io/badge/productivity-DC2626?style=flat-square&logoColor=white) | Gestionar recordatorios de Apple Reminders desde el terminal con remindctl. |
 | [bear-notes](../public/es/bear-notes/SKILL.md) | ![notes](https://img.shields.io/badge/notes-CA8A04?style=flat-square&logoColor=white) | Crear, buscar y gestionar notas en Bear en macOS mediante el CLI grizzly. |
+| [caveman](../public/es/caveman/SKILL.md) | ![productivity](https://img.shields.io/badge/productivity-DC2626?style=flat-square&logoColor=white) | Modo de comunicación ultra-comprimido que reduce el uso de tokens hasta un 75% manteniendo la precisión técnica. Se activa con `/caveman`. Tres niveles de intensidad: lite, full y ultra. |
 | [blogwatcher](../public/es/blogwatcher/SKILL.md) | ![productivity](https://img.shields.io/badge/productivity-DC2626?style=flat-square&logoColor=white) | Monitorizar blogs y feeds RSS/Atom para detectar nuevas publicaciones usando el CLI blogwatcher. |
 | [camsnap](../public/es/camsnap/SKILL.md) | ![media](https://img.shields.io/badge/media-EA580C?style=flat-square&logoColor=white) | Capturar fotogramas y clips de cámaras IP RTSP/ONVIF con el CLI camsnap. |
 | [coding-agent](../public/es/coding-agent/SKILL.md) | ![ai](https://img.shields.io/badge/ai-7C3AED?style=flat-square&logoColor=white) | Delega tareas de código a Claude Code o Codex vía proceso en segundo plano. |

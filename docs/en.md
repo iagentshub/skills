@@ -8,7 +8,7 @@
 <h1 align="center">Skills Catalog — English</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/skills-34-6366f1?style=flat-square" alt="Skills">
+  <img src="https://img.shields.io/badge/skills-38-6366f1?style=flat-square" alt="Skills">
   <img src="https://img.shields.io/badge/language-English-0891b2?style=flat-square" alt="Language">
 </p>
 
@@ -79,6 +79,10 @@ Required fields: `name`, `description`. Optional: `icon`, `category`, `homepage`
 | [nano-pdf](../public/en/nano-pdf/SKILL.md) | ![productivity](https://img.shields.io/badge/productivity-DC2626?style=flat-square&logoColor=white) | Edit PDFs with natural-language instructions using the nano-pdf CLI. |
 | [notion](../public/en/notion/SKILL.md) | ![notes](https://img.shields.io/badge/notes-CA8A04?style=flat-square&logoColor=white) | Notion API for creating and managing pages, databases, and blocks. |
 | [obsidian](../public/en/obsidian/SKILL.md) | ![notes](https://img.shields.io/badge/notes-CA8A04?style=flat-square&logoColor=white) | Work with Obsidian vaults (plain Markdown notes) and automate via obsidian-cli. |
+| [anthropic-api](../public/en/anthropic-api/SKILL.md) | ![ai](https://img.shields.io/badge/ai-7C3AED?style=flat-square&logoColor=white) | Build agents with the Anthropic Claude API: tool use, agentic loops, server tools, structured output. |
+| [github-copilot-skills](../public/en/github-copilot-skills/SKILL.md) | ![dev](https://img.shields.io/badge/dev-16A34A?style=flat-square&logoColor=white) | Create and manage GitHub Copilot Cloud Agent skills via SKILL.md files and the gh skill CLI. |
+| [mcp](../public/en/mcp/SKILL.md) | ![dev](https://img.shields.io/badge/dev-16A34A?style=flat-square&logoColor=white) | Create MCP servers exposing tools, resources, and prompts to any MCP-compatible AI client. |
+| [openai-agents](../public/en/openai-agents/SKILL.md) | ![ai](https://img.shields.io/badge/ai-7C3AED?style=flat-square&logoColor=white) | Build and orchestrate AI agents with the OpenAI Agents SDK: tools, handoffs, guardrails, multi-agent patterns. |
 | [openai-whisper](../public/en/openai-whisper/SKILL.md) | ![ai](https://img.shields.io/badge/ai-7C3AED?style=flat-square&logoColor=white) | Local speech-to-text with the Whisper CLI (no API key). |
 | [openai-whisper-api](../public/en/openai-whisper-api/SKILL.md) | ![ai](https://img.shields.io/badge/ai-7C3AED?style=flat-square&logoColor=white) | Transcribe audio via OpenAI Audio Transcriptions API (Whisper). |
 | [oracle](../public/en/oracle/SKILL.md) | ![ai](https://img.shields.io/badge/ai-7C3AED?style=flat-square&logoColor=white) | Best practices for using the oracle CLI (prompt + file bundling, engines, sessions). |

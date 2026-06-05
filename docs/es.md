@@ -8,7 +8,7 @@
 <h1 align="center">Catálogo de Skills — Español</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/skills-34-6366f1?style=flat-square" alt="Skills">
+  <img src="https://img.shields.io/badge/skills-38-6366f1?style=flat-square" alt="Skills">
   <img src="https://img.shields.io/badge/idioma-Español-DC2626?style=flat-square" alt="Idioma">
 </p>
 
@@ -79,6 +79,10 @@ Campos obligatorios: `name`, `description`. Opcionales: `icon`, `category`, `hom
 | [nano-pdf](../public/es/nano-pdf/SKILL.md) | ![productivity](https://img.shields.io/badge/productivity-DC2626?style=flat-square&logoColor=white) | Editar PDFs con instrucciones en lenguaje natural usando el CLI nano-pdf. |
 | [notion](../public/es/notion/SKILL.md) | ![notes](https://img.shields.io/badge/notes-CA8A04?style=flat-square&logoColor=white) | API de Notion para crear y gestionar páginas, bases de datos y bloques. |
 | [obsidian](../public/es/obsidian/SKILL.md) | ![notes](https://img.shields.io/badge/notes-CA8A04?style=flat-square&logoColor=white) | Trabaja con vaults de Obsidian y automatiza operaciones con obsidian-cli. |
+| [anthropic-api](../public/es/anthropic-api/SKILL.md) | ![ai](https://img.shields.io/badge/ai-7C3AED?style=flat-square&logoColor=white) | Construir agentes con la API de Anthropic Claude: tool use, bucles agénticos, herramientas servidor, salida estructurada. |
+| [github-copilot-skills](../public/es/github-copilot-skills/SKILL.md) | ![dev](https://img.shields.io/badge/dev-16A34A?style=flat-square&logoColor=white) | Crear y gestionar skills de GitHub Copilot Cloud Agent mediante archivos SKILL.md y el CLI gh skill. |
+| [mcp](../public/es/mcp/SKILL.md) | ![dev](https://img.shields.io/badge/dev-16A34A?style=flat-square&logoColor=white) | Crear servidores MCP que exponen herramientas, recursos y prompts a cualquier cliente IA compatible. |
+| [openai-agents](../public/es/openai-agents/SKILL.md) | ![ai](https://img.shields.io/badge/ai-7C3AED?style=flat-square&logoColor=white) | Construir y orquestar agentes IA con el OpenAI Agents SDK: herramientas, handoffs, guardrails, patrones multi-agente. |
 | [openai-whisper](../public/es/openai-whisper/SKILL.md) | ![ai](https://img.shields.io/badge/ai-7C3AED?style=flat-square&logoColor=white) | Transcribir audio localmente con el CLI de Whisper, sin API key. |
 | [openai-whisper-api](../public/es/openai-whisper-api/SKILL.md) | ![ai](https://img.shields.io/badge/ai-7C3AED?style=flat-square&logoColor=white) | Transcribir audio vía la API de OpenAI Audio Transcriptions (Whisper). Requiere OPENAI_API_KEY. |
 | [oracle](../public/es/oracle/SKILL.md) | ![ai](https://img.shields.io/badge/ai-7C3AED?style=flat-square&logoColor=white) | Bundlear un prompt con ficheros para hacer consultas one-shot a un LLM con contexto real del repo. |
